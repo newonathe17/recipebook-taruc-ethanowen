@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>{{ recipe.name }} Details</title>
-</head>
-<body>
-    <h1>{{ recipe.name }}</h1>
-    <p><strong>Author:</strong> {{ recipe.author.username }}</p>
-    <br>
-    <ul>
-        {% for recipe_ingredient in recipe.ingredients.all %}
-          <li>{{ recipe_ingredient.Quantity }} of {{ recipe_ingredient.ingredient.name }}</li>
-        {% empty %}
-          <li>No ingredients listed.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'recipe_list' %}">Back to Recipe List</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ recipe.name }}</h1>
+<p><strong>Author:</strong> {{ recipe.author.username }}</p>
+<br>
+<ul>
+    {% for recipe_ingredient in recipe.ingredients.all %}
+        <li>{{ recipe_ingredient.Quantity }} of {{ recipe_ingredient.ingredient.name }}</li>
+    {% empty %}
+        <li>No ingredients listed.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'recipe_list' %}">Back to Recipe List</a>
+{% endblock %}

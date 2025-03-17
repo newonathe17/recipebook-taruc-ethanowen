@@ -1,0 +1,12 @@
+{% extends 'registration_page.html' %}
+
+{% block content %}
+    <h4> Login Page </h4>
+    <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ request.GET.next|default:"/recipes/list/" }}">
+            <button type="submit">Login</button>
+        </form>
+    <a href="{% url 'password_reset' %}">Forgot password?</a>
+{% endblock %}

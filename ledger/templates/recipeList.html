@@ -1,19 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Recipe List</title>
-</head>
-<body>
-    <h1>All Recipes</h1>
-    <br>
-    <ul>
-        {% for recipe in recipes %}
-            <li>
-                <a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a>
-            </li>
-        {% empty %}
-            <li>No recipes found.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Recipe List - Recipe Book{% endblock %}
+
+{% block heading %}All Recipes{% endblock %}
+
+{% block content %}
+<ul>
+    {% for recipe in recipes %}
+        <li>
+            <a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a>
+        </li>
+    {% empty %}
+        <li>No recipes found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
