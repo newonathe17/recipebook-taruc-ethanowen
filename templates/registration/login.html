@@ -8,5 +8,6 @@
             <input type="hidden" name="next" value="{{ request.GET.next|default:"/recipes/list/" }}">
             <button type="submit">Login</button>
         </form>
+        <br/>
     <a href="{% url 'password_reset' %}">Forgot password?</a>
 {% endblock %}

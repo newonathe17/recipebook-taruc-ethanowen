@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ recipe.name }}</h1>
+<h2>{{ recipe.name }}</h2>
 <p><strong>Author:</strong> {{ recipe.author.username }}</p>
-<br>
+<p><strong>Created On:</strong> {{ recipe.created_on|date:"F j, Y, g:i a" }}</p>
+<p><strong>Last Updated:</strong> {{ recipe.updated_on|date:"F j, Y, g:i a" }}</p>
 <ul>
     {% for recipe_ingredient in recipe.ingredients.all %}
         <li>{{ recipe_ingredient.Quantity }} of {{ recipe_ingredient.ingredient.name }}</li>
