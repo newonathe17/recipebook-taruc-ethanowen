@@ -4,7 +4,7 @@ from .models import Recipe
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    return render(request, 'ledger/recipeList.html', {'recipes': recipes})
+    return render(request, 'ledger/recipe_list.html', {'recipes': recipes})
 
 @login_required
 def recipe_detail(request, pk):
@@ -12,8 +12,8 @@ def recipe_detail(request, pk):
     if recipes.exists():
         recipe = recipes.first()
     else:
-        return render(request, 'ledger/recipeList.html', {'recipes': Recipe.objects.all(), 'error': 'Recipe not found.'})
-    return render(request, 'ledger/recipe.html', {'recipe': recipe})
+        return render(request, 'ledger/recipe_list.html', {'recipes': Recipe.objects.all(), 'error': 'Recipe not found.'})
+    return render(request, 'ledger/recipe_detail.html', {'recipe': recipe})
 
 def homepage(request):
     return redirect('login')
