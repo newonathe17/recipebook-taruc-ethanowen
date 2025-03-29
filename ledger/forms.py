@@ -11,8 +11,8 @@ RecipeIngredientFormset = inlineformset_factory(
     Recipe,
     RecipeIngredient,
     fields=('Quantity', 'ingredient'),
-    extra=10,             # Number of empty ingredient forms you want to display by default
-    can_delete=False      # Allows users to remove any extra ingredient forms
+    extra=10,            
+    can_delete=False     
 )
 
 class RecipeImageForm(forms.ModelForm):

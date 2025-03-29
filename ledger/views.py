@@ -49,7 +49,6 @@ def recipe_add(request):
             return redirect(recipe.get_absolute_url())
     else:
         recipe_form = RecipeForm()
-        # Use an empty queryset to force the display of extra forms
         formset = RecipeIngredientFormset(queryset=RecipeIngredient.objects.none())
     
     context = {
@@ -63,14 +62,12 @@ def recipe_image_delete(request, image_id):
     image_qs = RecipeImage.objects.filter(pk=image_id)
     if image_qs.exists():
         image = image_qs.first()
-        # Retrieve the recipe using filter
         recipes = Recipe.objects.filter(pk=image.recipe.pk)
         if recipes.exists():
             recipe = recipes.first()
         else:
             return redirect('recipe_list')
         
-        # Optionally enforce that only the recipe's author can delete its images
         if request.user != recipe.author:
             return redirect(recipe.get_absolute_url())
         
