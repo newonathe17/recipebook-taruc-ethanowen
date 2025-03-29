@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Recipe, RecipeImage
-from .forms import RecipeForm, RecipeIngredientForm, RecipeImageForm
+from .models import Recipe, RecipeImage, RecipeIngredient
+from .forms import RecipeForm, RecipeIngredientFormset, RecipeImageForm, IngredientForm
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
@@ -35,30 +35,26 @@ def recipe_add_image(request, pk):
         form = RecipeImageForm()
 
     return render(request, 'ledger/recipe_add_image.html', {'recipe': recipe, 'form': form})
-
 @login_required
 def recipe_add(request):
     if request.method == 'POST':
         recipe_form = RecipeForm(request.POST)
-        ingredient_form = RecipeIngredientForm(request.POST)
-        if recipe_form.is_valid() and ingredient_form.is_valid():
-           
+        formset = RecipeIngredientFormset(request.POST)
+        if recipe_form.is_valid() and formset.is_valid():
             recipe = recipe_form.save(commit=False)
             recipe.author = request.user
             recipe.save()
-            
-            recipe_ingredient = ingredient_form.save(commit=False)
-            recipe_ingredient.recipe = recipe
-            recipe_ingredient.save()
-
+            formset.instance = recipe
+            formset.save()
             return redirect(recipe.get_absolute_url())
     else:
         recipe_form = RecipeForm()
-        ingredient_form = RecipeIngredientForm()
-
+        # Use an empty queryset to force the display of extra forms
+        formset = RecipeIngredientFormset(queryset=RecipeIngredient.objects.none())
+    
     context = {
         'recipe_form': recipe_form,
-        'ingredient_form': ingredient_form,
+        'formset': formset,
     }
     return render(request, 'ledger/recipe_add.html', context)
 
@@ -83,6 +79,16 @@ def recipe_image_delete(request, image_id):
     else:
         return redirect('recipe_list')
 
+@login_required
+def ingredient_add(request):
+    if request.method == 'POST':
+        form = IngredientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('recipe_add')
+    else:
+        form = IngredientForm()
+    return render(request, 'ledger/ingredient_add.html', {'form': form})
 def homepage(request):
     return redirect('login')
 

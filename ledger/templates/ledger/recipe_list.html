@@ -5,6 +5,10 @@
 {% block heading %}All Recipes{% endblock %}
 
 {% block content %}
+{% if request.user.is_authenticated %}
+    <p><a href="{% url 'recipe_add' %}">+ Add New Recipe</a></p>
+{% endif %}
+
 <ul>
     {% for recipe in recipes %}
         <li>
