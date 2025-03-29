@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Upload an Image for {{ recipe.name }}</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="image">Select Image:</label>
+    <input type="file" name="image" required><br>
+    <label for="description">Description:</label>
+    <input type="text" name="description" maxlength="255" required><br>
+    <button type="submit">Upload</button>
+</form>
+<a href="{{ recipe.get_absolute_url }}">Cancel</a>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Recipe - Recipe Book{% endblock %}
+
+{% block heading %}Add New Recipe{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <h3>Recipe Information</h3>
+    {{ recipe_form.as_p }}
+    
+    <h3>Ingredient Information</h3>
+    {{ ingredient_form.as_p }}
+    
+    <!-- Link to add a new ingredient if needed (this assumes you have an 'ingredient_add' URL) -->
+    <p>
+        <a href="{% url 'ingredient_add' %}">+ New Ingredient</a>
+    </p>
+    
+    <button type="submit">Save Recipe</button>
+</form>
+{% endblock %}
