@@ -17,12 +17,15 @@
 <h3>Images</h3>
 {% if recipe.images.all %}
     {% for image in recipe.images.all %}
-        <img src="{{ image.image.url }}" alt="{{ image.description }}" style="max-width:300px; margin:10px;">
+        <div style="margin-bottom: 15px;">
+            <img src="{{ image.image.url }}" alt="{{ image.description }}" style="max-width:300px; margin:10px;">
+            <br>
+                <a href="{% url 'recipe_image_delete' image.id %}">Remove Image</a>
+        </div>
     {% endfor %}
 {% else %}
     <p>No images uploaded for this recipe.</p>
 {% endif %}
-
 <a href="{% url 'recipe_add_image' recipe.id %}">Upload New Image</a>
 <br>
 <a href="{% url 'recipe_list' %}">Back to Recipe List</a>

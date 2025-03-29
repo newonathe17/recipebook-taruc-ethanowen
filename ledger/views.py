@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Recipe
-from .forms import RecipeForm, RecipeIngredientForm
+from .models import Recipe, RecipeImage
+from .forms import RecipeForm, RecipeIngredientForm, RecipeImageForm
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
@@ -22,15 +22,20 @@ def recipe_add_image(request, pk):
     if recipes.exists():
         recipe = recipes.first()
     else:
-        # Handle the case where no recipe is found; for example, redirect to the recipe list with an error.
         return redirect('recipe_list')
     
     if request.method == 'POST':
-        # Process form data to create a RecipeImage instance (implementation goes here)
-        # After processing, redirect to the recipe detail page.
-        return redirect(recipe.get_absolute_url())
-    
-    return render(request, 'ledger/recipe_add_image.html', {'recipe': recipe})
+        form = RecipeImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            recipe_image = form.save(commit=False)
+            recipe_image.recipe = recipe
+            recipe_image.save()
+            return redirect(recipe.get_absolute_url())
+    else:
+        form = RecipeImageForm()
+
+    return render(request, 'ledger/recipe_add_image.html', {'recipe': recipe, 'form': form})
+
 @login_required
 def recipe_add(request):
     if request.method == 'POST':
@@ -57,6 +62,26 @@ def recipe_add(request):
     }
     return render(request, 'ledger/recipe_add.html', context)
 
+@login_required
+def recipe_image_delete(request, image_id):
+    image_qs = RecipeImage.objects.filter(pk=image_id)
+    if image_qs.exists():
+        image = image_qs.first()
+        # Retrieve the recipe using filter
+        recipes = Recipe.objects.filter(pk=image.recipe.pk)
+        if recipes.exists():
+            recipe = recipes.first()
+        else:
+            return redirect('recipe_list')
+        
+        # Optionally enforce that only the recipe's author can delete its images
+        if request.user != recipe.author:
+            return redirect(recipe.get_absolute_url())
+        
+        image.delete()
+        return redirect(recipe.get_absolute_url())
+    else:
+        return redirect('recipe_list')
 
 def homepage(request):
     return redirect('login')
