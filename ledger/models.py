@@ -55,3 +55,8 @@ class RecipeImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.recipe.name}"
+    
+    
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super().delete(*args, **kwargs)
