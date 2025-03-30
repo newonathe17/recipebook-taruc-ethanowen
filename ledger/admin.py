@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import Ingredient, Recipe, RecipeIngredient, Profile, RecipeImage  
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.utils.html import format_html
+
 
 class ProfileinLine(admin.StackedInline):
     model = Profile
@@ -14,6 +16,13 @@ class RecipeImageInline(admin.TabularInline):
 class RecipeImageInline(admin.TabularInline):
     model = RecipeImage
     extra = 1
+    readonly_fields = ('image_preview',)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height: 100px;"/>', obj.image.url)
+        return ""
+    image_preview.short_description = "Image Preview"
 
 class UserAdmin(BaseUserAdmin):
     inlines = [ProfileinLine,]
